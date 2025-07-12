@@ -1,0 +1,504 @@
+<html>
+<head>
+  <title>SRI LANKA IEMI CHECKER</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    header {
+      background-color: #99c6ebfd;
+      padding: 30px;
+      text-align: center;
+      font-size: 35px;
+      color: rgb(248, 247, 255);
+    }
+    article {
+      padding: 20px;
+      width: 100%;
+      background-color: #e3eff3;
+      height: 300px;
+    }
+    section::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    footer {
+      background-color: #94c1eb;
+      padding: 10px;
+      text-align: center;
+      color: white;
+    }
+    
+    nav {
+      float: right;
+      width: 100%;
+      height: 300px;
+      background: #c2c8d1;
+      padding: 20px;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    @media (max-width: 600px) {
+      nav, article {
+        width: 100%;
+        height: auto;
+      }
+    }
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 400px;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    form {
+      text-align: center;
+      margin-top: 50px;
+    }
+    .results {
+      text-align: center;
+      margin-top: 20px;
+      font-family: Arial;
+    }
+    .valid {
+      color: green;
+      font-weight: bold;
+    }
+    .invalid {
+      color: red;
+      font-weight: bold;
+    }
+    .result-item {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .faq-item {
+  margin: 15px 0;
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #5a8fbd;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-radius: 6px;
+}
+
+.faq-question:hover {
+  background-color: #4580b3;
+}
+
+.faq-answer {
+  padding: 10px 15px;
+  background-color: #2c92ce;
+  display: none;
+  border-left: 3px solid #5f92c9;
+  margin-top: 5px;
+  border-radius: 4px;
+}
+  </style>
+</head>
+<body>
+<header>
+<img src="C:\Users\Deshalini\Desktop/CR11650_Mint_Blog_IMEI_Update_4_@2x.png"height="200"width="300">
+  <h5>SRI LANKA</h5>
+  <h3>IMEI Tester | IMEI சரிபார்ப்பு | IMEI පරීක්ෂණය</h3>
+  <h5>A Web Tool to Verify Mobile IMEI Status</h5>
+</header>
+  <article>
+ <form onsubmit="searchIMEIs(event)">
+      <input type="text" name="imei" placeholder="Enter 15-digit IMEI number" pattern="\d{15}" maxlength="15" required>
+      <button type="submit">Search</button>
+    </form>
+    <div class="actions">
+      <button onclick="copyResults()">Copy Result</button>
+    </div>
+    <div class="results" id="results"></div>
+    <script>
+      // Sample IMEI blacklist
+      const imeiDatabase = ["353791802113479", "358764172113473"];
+      let currentResults = "";
+      function searchIMEIs(event) {
+        event.preventDefault();
+        const imei = document.querySelector('input[name="imei"]').value.trim();
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "";
+        currentResults = "";
+        if (!/^\d{15}$/.test(imei)) {
+          const resultHTML = `
+            <div class="result-item invalid">
+              ⚠️ IMEI: ${imei} is INVALID - Must be exactly 15 digits.
+            </div>
+          `;
+          resultsDiv.innerHTML += resultHTML;
+          return;
+        }
+        const isStolen = imeiDatabase.includes(imei);
+        const statusText = isStolen
+          ? `❌ IMEI: ${imei} is INVALID (முறைப்பாடு / වංචාදායක)`
+          : `✔️ IMEI: ${imei} is VALID (சரி / නිවැරදි)`;
+        currentResults = statusText;
+        const resultHTML = `
+          <div class="result-item ${isStolen ? 'invalid' : 'valid'}">
+            ${statusText}
+          </div>
+        `;
+        resultsDiv.innerHTML += resultHTML;
+      }
+      function copyResults() {
+        navigator.clipboard.writeText(currentResults).then(() => {
+          alert("Results copied to clipboard!");
+        }).catch(err => {
+          alert("Copy failed: " + err);
+        });
+      }
+    </script>
+  </article>
+<section style="background-color: #c5d9f1; padding: 30px; margin: 30px 0;">
+  <h2 style="text-align: center; color: #2c3e50;">❓ Frequently Asked Questions (FAQ)</h2>
+
+  <div class="faq-item">
+    <button class="faq-question">1. What is an IMEI number?</button>
+    <div class="faq-answer">IMEI (International Mobile Equipment Identity) is a unique 15-digit code used to identify your mobile device.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">2. How do I find my IMEI number?</button>
+    <div class="faq-answer">Dial *#06# on your phone. A 15-digit IMEI number will appear.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">3. What does blacklisted mean?</button>
+    <div class="faq-answer">A blacklisted IMEI indicates the phone is reported as lost or stolen.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">4. Is my IMEI stored on this site?</button>
+    <div class="faq-answer">No. We do not save or share any IMEI you enter. It is used for instant checking only.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">5. What if I enter the wrong IMEI?</button>
+    <div class="faq-answer">You will see a message saying the IMEI is invalid. Make sure it's 15 digits.</div>
+  </div>
+
+  <div class="faq-item">
+  <button class="faq-question">6. Can I use this service for any mobile brand?</button>
+  <div class="faq-answer">Yes. This service works for any brand as long as the device has a valid IMEI number.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">7. Is this service free to use?</button>
+  <div class="faq-answer">Absolutely. The IMEI checker is 100% free for public use.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">8. Can I check multiple IMEI numbers?</button>
+  <div class="faq-answer">Currently, you can check one IMEI number at a time. Multi-check is coming soon.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">9. Who should I contact if my IMEI is blacklisted?</button>
+  <div class="faq-answer">You should contact your local police or mobile network provider to report or resolve the issue.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">10. Does this website work on mobile phones?</button>
+  <div class="faq-answer">Yes, the website is responsive and works on phones, tablets, and computers.</div>
+</div>
+
+</section>
+
+<footer>
+  <img src="C:\Users\Deshalini\Desktop/sri police.jpg"width="300">
+  <center>
+    <table border="30" style="width:60%">
+      <caption><h1>srilanka_Police_Contact</h1></caption>
+    <tr>
+        <th>NO</th>
+        <th>Place</th>
+        <th>General Number</th>
+        <th>mobile</th>
+    </tr>
+    <tr>
+        <td>01</td>
+        <td>Jaffna</td>
+        <td>021-2222222</td>
+        <td>071-8591329</td>
+    </tr>
+    <tr>
+        <td>02</td>
+        <td>Kilinochchi</td>
+        <td>021-2285467</td>
+        <td>071-8591349</td>
+    </tr>
+    <tr>
+        <td>03</td>
+        <td>Mannar</td>
+        <td>023-2222222</td>
+        <td>071-8591365</td>
+    </tr>
+    <tr>
+        <td>04</td>
+        <td>Vavuniya</td>
+        <td>024-2222222</td>
+        <td>071-8591343</td>
+    </tr>
+    <tr>
+        <td>05</td>
+        <td>Mullaittivu</td>
+        <td>021-2290120</td>
+        <td>071-8591376</td>
+    </tr>
+    <tr>
+        <td>06</td>
+        <td>Anuradhapura</td>
+        <td>025-2222222</td>
+        <td>071-8591203</td>
+    </tr>
+    <tr>
+        <td>07</td>
+        <td>Polonnaruwa</td>
+        <td>027-2222222</td>
+        <td>0713-859123</td>
+    </tr>
+    <tr>
+        <td>08</td>
+        <td>Kurunegala</td>
+        <td>037-2222222</td>
+        <td>071-8591247</td>
+    </tr>
+    <tr>
+        <td>09</td>
+        <td>Puttalam</td>
+        <td>032-2265222</td>
+        <td>071-8591292</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>Ampara</td>
+        <td>063-2222222</td>
+        <td>071-8591148</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>Batticaloa</td>
+        <td>065-2224422</td>
+        <td>071-8591130</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>Trincomalee</td>
+        <td>026-2222222</td>
+        <td>071-8591174</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>Kandy</td>
+        <td>081-2222222</td>
+        <td>071-8591045</td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td>Matale</td>
+        <td>066-2222222</td>
+        <td>071-8591082</td>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td>Nuwaraeliya</td>
+        <td>052-2222222</td>
+        <td>071-8591097</td>
+    </tr>
+    <tr>
+        <td>16</td>
+        <td>Kegalle</td>
+        <td>035-2222222</td>
+        <td>071-8591413</td>
+    </tr>
+    <tr>
+        <td>17</td>
+        <td>Hambantota</td>
+        <td>047-2220222</td>
+        <td>071-8591502</td>
+    </tr>
+    <tr>
+        <td>18</td>
+        <td>Matara</td>
+        <td>041-2222223</td>
+        <td>071-8591436</td>
+    </tr>
+    <tr>
+        <td>19</td>
+        <td>Badulla</td>
+        <td>055-2222222</td>
+        <td>071-8591511</td>
+    </tr>
+    <tr>
+        <td>20</td>
+        <td>Monaragala</td>
+        <td>055-2276222</td>
+        <td>071-8591536</td>
+    </tr>
+    <tr>
+        <td>21</td>
+        <td>Kegalle</td>
+        <td>035-2222222</td>
+        <td>071-8591413</td>
+    </tr>
+    <tr>
+        <td>22</td>
+        <td>Rathnapura</td>
+        <td>045-2222222</td>
+        <td>071-8591385</td>
+    </tr>
+    <tr>
+        <td>23</td>
+        <td>Colombo</td>
+        <td>011-2433342</td>
+        <td>071-8591551</td>
+    </tr>
+    <tr>
+        <td>24</td>
+        <td>Gampaha</td>
+        <td>033-2222224</td>
+        <td>071-8591611</td>
+    </tr>
+    <tr>
+        <td>25</td>
+        <td>Kalutara</td>
+        <td>034-2237225</td>
+        <td>071-8591692</td>
+    </tr>
+    </table>
+  </center>
+</footer>
+
+<hr>
+<h3 style="text-align:center;">📢 Report a IMEI</h3>
+<form method="POST" action="report_imei.php">
+  <div style="text-align:center;">
+    <input type="text" name="report_imei" placeholder="Enter IMEI to Report" maxlength="15" required>
+    <br><br>
+    <textarea name="reason" placeholder="Why are you reporting this IMEI?" rows="3" cols="50" required></textarea>
+    <br><br>
+    <button type="submit">Report IMEI</button>
+  </div>
+</form>
+  <section>
+    <section style="background-color:#c1d2ee; padding: 30px; margin-top: 30px;">
+  <center><h2>📗  User Guide</h2></center>
+    <h3>Section 1: What is This Website?</h3>
+    <p>This website helps you <strong>check if your mobile’s IMEI number</strong> is valid or blacklisted (reported or stolen).<br>
+    You can also find <strong>Sri Lankan police contact numbers</strong> for help.</p>
+    <h3> Section 2: How to Find Your IMEI Number</h3>
+    <p> On your phone, dial: <code>*#06#</code><br>
+    A <strong>15-digit number</strong> will appear. This is your <strong>IMEI number</strong>.</p>
+    <h3> Section 3: How to Use this Website</h3>
+    <ol>
+      <li> Enter the 15-digit IMEI number into the box.</li>
+      <li> Do <strong>not</strong> add commas ( , ) or spaces.</li>
+      <li> Click the <strong>Search</strong> button.</li>
+    </ol>
+    <h3> Section 4: Understand the Result</h3>
+    <ul>
+      <li>✅ <strong>VALID</strong>  Your IMEI is not reported</li>
+      <li>❌ <strong>INVALID</strong>  IMEI is on the blacklist (may be stolen)</li>
+    </ul>
+    <h3>Section 5(optional): Copy the Result</h3>
+    <p>Click the <strong>Copy Result</strong> button to copy the result. You can paste it into a message or document.</p>
+    <h3>section 6:Report a IEMI</h3>
+    <p>Can enter IEMI number for report </p>
+    <h3>Section 7:FAQ </h3>
+    <p> Frequently Asked Questions & Answers </p>
+    <h3> for more info </h3>
+    <p>Scroll down the page to find a <strong>table of police contact numbers & Related Links</strong> .<br>
+   </p>
+</section>
+<form>
+  <input type="text" placeholder="Your name" required><br>
+  <textarea placeholder="Your feedback"></textarea><br>
+  <button type="submit">Send Feedback</button>
+</form>
+
+<nav>
+  <table>
+    <th>
+      <h1>
+      <center><b>Related Links</b></center>
+      <u1>
+        <li><a href="https://www.police.lk/" target="_blank">www.ineed.police.lk</a><br></li>
+        <li><a href="https://www.imei.info/" target="_blank">www.ineed.iemi.lk</a><br></li>
+        <li><a href="https://www.trc.gov.lk/pages_e.php?id=11" target="_blank">www.Telecommunications Regulatory Commission</a></li>
+      </u1>
+      </h1>
+    </th>
+    <th>
+      <h1>
+      <b><center>Contact Us</center></b>
+      <ul>
+        <li>Mobile_077**********</li>
+        <li>G-mail_***********@gmail.com</li>
+        <li>Facebook_**********</li>
+        <li>Youtupe_******</li>
+        <li>Tiktok_*********</li>
+        <li>Instagram_******</li>
+        <li>telegram_*****</li>
+      </ul>
+    </h1>
+    </th>
+    <th>
+      <img src="C:\Users\Deshalini\Desktop/How-to-Obtain-your-IMEI-Number-1024x342.jpg"width="900"height="250"S>
+
+    </th>
+  </table>
+</nav>
+   <center>
+  <h2>
+        <b>All Rights Reserved</b><br>
+         This is the Official Website of the IMEI Tester of Sri Lanka.<br>
+  </h2>
+  <h1>  
+         Design by<strong>THAMILCHELVAN MENISHA</strong>
+  </h1>
+  <img src="C:\Users\Deshalini\Desktop/Copyright-Symbol.png"height="100"width="150"
+  </center>
+  <script>
+  const questions = document.querySelectorAll(".faq-question");
+
+  questions.forEach(button => {
+    button.addEventListener("click", () => {
+      const answer = button.nextElementSibling;
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
+    });
+  });
+</script>
+
+ </body>
+</html>
